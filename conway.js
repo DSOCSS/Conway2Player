@@ -2,6 +2,7 @@
 // there are two alive states, 'R' and 'B'
 
 let Constants = {
+  PERCENTAGE_INITIAL_ALIVE_CELLS_EACH: 0.25,
   VICTORY_THRESHOLD: 0.8,
 };
 
@@ -121,8 +122,8 @@ function winner(board) {
 // returns an array containing indices of possible moves, i.e. empty indices
 function possibleMoves(board) {
   let result = Array();
-  for ((i, row) of board.entries()) {
-    for ((j, cell) of row.entries()) {
+  for ([i, row] of board.entries()) {
+    for ([j, cell] of row.entries()) {
       if (cell != "R" && cell != "B") {
         result.push((i, j));
       }
@@ -159,6 +160,36 @@ function newBoard(numrows, numcols) {
   // if numrows == 9
   // mirror of 3 is 5 = 8 - 3
   let mirror = (x) => numrows - 1 - x;
+
+  // randomly select a color to populate the left side
+  let color = Math.random() > 0.5 ? "R" : "B";
+  let otherColor = color == "R" ? "B" : "R";
+
+  // initialize the array
+  let result = Array.from({ length: numrows },
+    () => Array(numcols).fill(null)
+  );
+
+  // populate the array
+  let cellsToFill = floor(numrows * numcols * Constants.PERCENTAGE_INITIAL_ALIVE_CELLS_EACH);
+  while (cellsToFill > 0) {
+    let i = getRandomIndex(maxXOfFirstHalf + 1);
+    let j = getRandomIndex(numcols);
+
+    if (result[i][j] == null) {
+      result[i][j] = color;
+      result[mirror(i)][j] = otherColor;
+      cellsToFill--;
+    }
+  }
+
+  return result;
+}
+
+// returns a random integer index between 0 and the max bound
+// the max bound is exclusive
+function getRandomIndex(maxIndex) {
+  return floor(Math.random * maxIndex);
 }
 
 
