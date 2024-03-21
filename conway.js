@@ -117,7 +117,20 @@ function winner(board) {
   return null;
 }
 
+// Input: current board
+// returns an array containing indices of possible moves, i.e. empty indices
+function possibleMoves(board) {
+  let result = Array();
+  for ((i, row) of board.entries()) {
+    for ((j, cell) of row.entries()) {
+      if (cell != "R" && cell != "B") {
+        result.push((i, j));
+      }
+    }
+  }
 
+  return result;
+}
 
 
 
