@@ -132,6 +132,37 @@ function possibleMoves(board) {
   return result;
 }
 
+// creates a starting gameboard, with values populated with 
+// "R", "B", and null
+//
+// the game board is mirrored across a vertical axis in the middle
+function newBoard(numrows, numcols) {
+
+  // Logic for maxXOfFirstHalf:
+  //
+  // if numrows = 8 
+  // rows are 0 to 7
+  // first half is 0,1,2,3 so maxXOfFirstHalf is 3
+  // floor(8/2 - 1) = 3
+  //
+  //
+  // if numrows = 9
+  // rows are 0 to 8 
+  // first half is 0,1,2,3 so maxXOfFirstHalf is 3
+  // floor(9/2 - 1) = 3
+  let maxXOfFirstHalf = Math.floor((numrows / 2) - 1);
+
+  // Similar logic for mirroring
+  // if numrows = 8 
+  // mirror of 3 is 4 = 7 - 3
+  //
+  // if numrows == 9
+  // mirror of 3 is 5 = 8 - 3
+  let mirror = (x) => numrows - 1 - x;
+}
+
+
+
 
 
 
