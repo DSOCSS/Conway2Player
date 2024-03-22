@@ -6,6 +6,11 @@ let Constants = {
   VICTORY_THRESHOLD: 0.8,
 };
 
+let Strategies = {
+  RANDOM: "Strategies.random",
+  SINGLE_MAX_FLIPPED: "Strategies.single_max_flipped",
+};
+
 // **************** functions **************************** /
 
 // computes and returns the next next generation 
@@ -41,7 +46,7 @@ function nextState(i, j, maxI, maxJ, prev, neighborIndexFn) {
   let neighbors = neighborIndexFn(i, j, maxI, maxJ).map((i, j) => prev[i][j]);
   let numR = 0;
   let numB = 0;
-  for (neighbor of neighbors) {
+  for (let neighbor of neighbors) {
     if (neighbor === "R") {
       numR++;
     } else if (neighbor === "B") {
@@ -192,7 +197,28 @@ function getRandomIndex(maxIndex) {
   return floor(Math.random * maxIndex);
 }
 
+// choose an index for the "AI" player to play
+// returns the 2D coordinates of the chosen move
+//
+// needs neighborIndexFn to actually figure out how the game is being played
+function computerMove(board, neighborIndexFn, strategy, computerColor) {
+  let validIndices = possibleMoves(board);
+  switch (strategy) {
+    case Strategies.RANDOM:
+      return randomMove(validIndices);
+    case Strategies.SINGLE_MAX_FLIPPED:
+      return singleMaxFlippedMove(board, neighborIndexFn, validIndices, computerColor);
+  }
+}
 
+// returns a random index from the array of valid indices
+function randomMove(validIndices) {
+  return validIndices[getRandomIndex(validIndices.length)];
+}
+
+// for each valid move, checks which move will result in the greatest
+// number of cells flipped to the computer's side in the next move 
+// TODO: write this function after checking exactly how moves work
 
 
 
