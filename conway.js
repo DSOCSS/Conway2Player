@@ -1,12 +1,12 @@
 // global assumptions:
 // there are two alive states, 'R' and 'B'
 
-let Constants = {
+const Constants = {
   PERCENTAGE_INITIAL_ALIVE_CELLS_EACH: 0.25,
   VICTORY_THRESHOLD: 0.8,
 };
 
-let Strategies = {
+const Strategies = {
   RANDOM: "Strategies.random",
   SINGLE_MAX_FLIPPED: "Strategies.single_max_flipped",
 };
@@ -56,11 +56,16 @@ function nextState(i, j, maxI, maxJ, prev, neighborIndexFn) {
 
   let numAlive = numR + numB;
   if (numAlive < 2 || numAlive > 3) {
-    return NULL;
+    return null; // dies from over- or underpopulation
   } else if (numAlive === 2) {
-    return prev[i][j];
+    return prev[i][j]; // no change
+  } else if (numAlive === 3 && prev[i][j] == null) {
+    //new cell created with 3 parents
+    if (numB > numR) return "B";
+    return "R";
   } else {
-    return numR > numB ? "R" : "B";
+    // has 3 neighbors and is alive
+    return prev[i][j];
   }
 }
 
@@ -75,6 +80,7 @@ function nowrapNeighborIndices(i, j, maxI, maxJ) {
       }
     }
   }
+  return result;
 }
 
 // returns an array of all indices adjacent to the passed index 
@@ -89,6 +95,7 @@ function wrapNeighborIndices(i, j, maxI, maxJ) {
       }
     }
   }
+  return result;
 }
 
 // returns which player, if any, has won the game
@@ -176,7 +183,7 @@ function newBoard(numrows, numcols) {
   );
 
   // populate the array
-  let cellsToFill = floor(numrows * numcols * Constants.PERCENTAGE_INITIAL_ALIVE_CELLS_EACH);
+  let cellsToFill = Math.floor(numrows * numcols * Constants.PERCENTAGE_INITIAL_ALIVE_CELLS_EACH);
   while (cellsToFill > 0) {
     let i = getRandomIndex(maxXOfFirstHalf + 1);
     let j = getRandomIndex(numcols);
@@ -194,7 +201,7 @@ function newBoard(numrows, numcols) {
 // returns a random integer index between 0 and the max bound
 // the max bound is exclusive
 function getRandomIndex(maxIndex) {
-  return floor(Math.random * maxIndex);
+  return Math.floor(Math.random() * maxIndex);
 }
 
 // choose an index for the "AI" player to play
@@ -217,7 +224,7 @@ function randomMove(validIndices) {
 }
 
 // for each valid move, checks which move will result in the greatest
-// number of cells flipped to the computer's side in the next move 
+// number of cells flipped to the computer's side in the next move
 // TODO: write this function after checking exactly how moves work
 
 
