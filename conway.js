@@ -43,7 +43,8 @@ function nextGeneration(prev, neighborIndexFn) {
 // calculated using the previous generation and a given
 // next state function
 function nextState(i, j, maxI, maxJ, prev, neighborIndexFn) {
-  let neighbors = neighborIndexFn(i, j, maxI, maxJ).map((i, j) => prev[i][j]);
+  let neighbors = neighborIndexFn(i, j, maxI, maxJ).map(tup => prev[tup[0]][j]);
+  console.log(neighborIndexFn(i, j, maxI, maxJ));
   let numR = 0;
   let numB = 0;
   for (let neighbor of neighbors) {
@@ -72,11 +73,12 @@ function nextState(i, j, maxI, maxJ, prev, neighborIndexFn) {
 // returns an array of all indices adjacent to the passed index 
 // borders are considered solid and so bordering cells have fewer neighbors
 function nowrapNeighborIndices(i, j, maxI, maxJ) {
+  // console.log("i: " + i + "j: " + j + "(maxI, maxJ): " + maxI + " " + maxJ);
   let result = new Array();
   for (x = Math.max(0, i - 1); x < Math.min(maxI, i + 2); x++) {
     for (y = Math.max(0, j - 1); y < Math.min(maxJ, j + 2); y++) {
       if (!(x == i && y == j)) {
-        result.push((i, j));
+        result.push([x, y]);
       }
     }
   }
@@ -91,7 +93,7 @@ function wrapNeighborIndices(i, j, maxI, maxJ) {
   for (x = (i - 1) % maxI; x <= (i + 1) % maxI; x++) {
     for (y = (j - 1) % maxJ; y <= (j + 1) % maxJ; y++) {
       if (!(x == i && y == j)) {
-        result.push((i, j));
+        result.push([x, y]);
       }
     }
   }
