@@ -43,7 +43,7 @@ function nextGeneration(prev, neighborIndexFn) {
 // calculated using the previous generation and a given
 // next state function
 function nextState(i, j, maxI, maxJ, prev, neighborIndexFn) {
-  let neighbors = neighborIndexFn(i, j, maxI, maxJ).map(tup => prev[tup[0]][j]);
+  let neighbors = neighborIndexFn(i, j, maxI, maxJ).map(tup => prev[tup[0]][tup[1]]);
   //console.log(neighborIndexFn(i, j, maxI, maxJ));
   let numR = 0;
   let numB = 0;

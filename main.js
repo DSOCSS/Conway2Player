@@ -38,13 +38,11 @@ function drawGame(board) {
       // highlight dead cells that will become alive
       if(board[row][col] == null && nextBoard[row][col] != null){
         const innerBoxSize = cellsize / 2;
-        console.log(row,col,"not null");
         ctx.fillStyle = getColor(nextBoard[row][col]);
         ctx.fillRect(col * cellsize + innerBoxSize, row * cellsize + innerBoxSize, cellsize - paddingSize - innerBoxSize * 2, cellsize - paddingSize - innerBoxSize * 2);
       }
     }
   }
-  console.log(board.length, board[0].length);
 }
 
 // Choose a board size / ratio based on screen size
