@@ -4,7 +4,8 @@ const ctx = canvas.getContext("2d");
 const Colors = {
   red: "#d13e36",
   blue: "#3266a8",
-  black: "#4f3754"
+  black: "#4f3754",
+  highlight: "#1ff0a7"
 }
 
 function getColor(value) {
@@ -26,7 +27,6 @@ function drawGame(board, interpolation = 0.5) {
   drawChart(calculateBluePercentage(board)); // draw a pie chart
 
   let nextBoard = nextGeneration(board, nowrapNeighborIndices); //get the next board
-  console.log("nextBoard", nextBoard);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   let paddingSize = getPaddingSize();
@@ -54,24 +54,28 @@ function drawGame(board, interpolation = 0.5) {
   }
 }
 
-function calculateBluePercentage(board){
+function calculateBluePercentage(board) {
   let blue = 0;
   let red = 0;
-  for(let row = 0; row < board.length; row++){
-    for (let col = 0; col < board[row].length; col++){
-      if(board[row][col] == "B") blue++;
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      if (board[row][col] == "B") blue++;
       else if (board[row][col] == "R") red++;
     }
   }
   return blue / (blue + red);
 }
 
+// highlight a square where a move occured (easier to keep track of game)
 function highlightSquares(squares) {
-  for (let square in squares) {
-    console.log(square);
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(square[1] * getCellSize(), square[0] * getCellSize, cellsize, cellsize);
-  }
+  squares.forEach((square) => {
+    ctx.strokeStyle = Colors.highlight;
+    ctx.lineWidth = getPaddingSize();
+    ctx.beginPath();
+    ctx.rect(square[1] * getCellSize() - getPaddingSize() / 2, square[0] * getCellSize() - getPaddingSize() / 2, getCellSize(), getCellSize());
+    ctx.stroke();
+    console.log(square[1] * getCellSize(), square[0] * getCellSize(), getCellSize(), getCellSize());
+  });
 }
 
 // Choose a board size / ratio based on screen size
@@ -96,14 +100,23 @@ function resizeCanvas(game) {
   let topBarElem = document.getElementById("topBar");
   canvas.width = screenElem.clientWidth - 20;
   canvas.height = screenElem.clientHeight - topBarElem.clientHeight - 20;
+
+  let aspectRatio = game[0].length / game.length; // width / height
+  console.log(aspectRatio);
+
+  // remove excess width
+  canvas.width = Math.min(canvas.width, canvas.height * aspectRatio);
+  // remove excess height
+  canvas.height = Math.min(canvas.height, canvas.width / aspectRatio);
   drawGame(game);
 }
 
-function advance() {
+function advance(moves) {
   //let nextBoard = nextGeneration(board, nowrapNeighborIndices);
   let c = 0.5;
   const drawInterval = setInterval(() => {
     drawGame(board, c);
+    highlightSquares(moves);
     c -= 0.1;
     if (c <= 0) {
       clearInterval(drawInterval); // stop the interval
@@ -123,12 +136,12 @@ canvas.addEventListener("click", (evt) => {
     // valid move
     playersTurn = false; // temporarily disable player from making another turn
     board[y][x] = 'B'; // player move
-
+    
     let comMove = computerMove(board, nowrapNeighborIndices, Strategies.RANDOM, "R");
-    console.log("CPU", comMove);
     board[comMove[0]][comMove[1]] = 'R'; // computer move
-    drawGame(board);
-    advance();
+    
+    drawGame(board); // draw & update game
+    advance([comMove, [y,x]]);
   }
 });
 
@@ -151,5 +164,4 @@ function drawChart(bluePercent) {
   ctx2.arc(chartCanvas.width / 2, chartCanvas.height / 2, chartCanvas.width / 2, 0, bluePercent * Math.PI * 2);
   ctx2.moveTo(chartCanvas.width / 2, chartCanvas.height / 2); // return to center
   ctx2.fill();
-
 }
