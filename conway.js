@@ -139,7 +139,7 @@ function possibleMoves(board) {
   for ([i, row] of board.entries()) {
     for ([j, cell] of row.entries()) {
       if (cell != "R" && cell != "B") {
-        result.push((i, j));
+        result.push([i, j]);
       }
     }
   }
