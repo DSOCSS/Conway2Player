@@ -100,12 +100,9 @@ function wrapNeighborIndices(i, j, maxI, maxJ) {
   return result;
 }
 
-// returns which player, if any, has won the game
-// if no player has won, returns null
-// TODO: maybe have an enum or something else
-//
-// Input - a 2d array of strings
-function winner(board) {
+// counts each color and non-color
+// returns array [numRed, numBlue, numOther]
+function countColors(board) {
   let reds = 0;
   let blues = 0;
   let other = 0;
@@ -118,6 +115,30 @@ function winner(board) {
       other++;
     }
   }
+  return [reds, blues, other];
+}
+
+function countSpecificColor(board, color) {
+  // slightly inefficient but doesn't matter here
+  let [reds, blues, _] = countColors(board);
+  if (color === "R") {
+    return reds;
+  } else if (color === "B") {
+    return blues;
+  }
+
+  return null;
+}
+
+
+// returns which player, if any, has won the game
+// if no player has won, returns null
+// TODO: maybe have an enum or something else
+//
+// Input - a 2d array of strings
+function winner(board) {
+
+  let [reds, blues, other] = countColors(board);
 
   let total = reds + blues + other;
   let threshold = Constants.VICTORY_THRESHOLD * total;
@@ -227,7 +248,40 @@ function randomMove(validIndices) {
 
 // for each valid move, checks which move will result in the greatest
 // number of cells flipped to the computer's side in the next move
-// TODO: write this function after checking exactly how moves work
+function singleMaxFlippedMove(board, neighborIndexFn, validIndices, computerColor) {
+  let bestMovesArray = new Array();
+  let maxFlipped = 0;
+  for (index of validIndices) {
+    let x = index[0];
+    let y = index[1];
+
+    let withoutMove = nextGeneration(board, neighborIndexFn);
+    let scoreOld = countSpecificColor(withoutMove, computerColor);
+
+    let savedElementOfUnmodifedBoard = board[x][y];
+    let temporarilyModifiedBoard = board;
+    temporarilyModifiedBoard[x][y] = computerColor;
+
+    let withMove = nextGeneration(temporarilyModifiedBoard, neighborIndexFn);
+    let scoreNew = countSpecificColor(temporarilyModifiedBoard, computerColor);
+
+    // reset board to old state 
+    board[x][y] = savedElementOfUnmodifedBoard;
+
+    // now do the flipping calculation 
+    let flipped = scoreNew - scoreOld;
+    if (flipped > maxFlipped) {
+      maxFlipped = flipped;
+      bestMovesArray = new Array();
+      bestMovesArray.push([x, y]);
+    } else if (flipped === maxFlipped) {
+      bestMovesArray.push([x, y]);
+    }
+  }
+
+  return bestMovesArray[getRandomIndex(bestMovesArray.length)];
+}
+
 
 
 
