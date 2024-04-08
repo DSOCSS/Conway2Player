@@ -16,6 +16,19 @@
     justify-content: center;
     align-items: center;
 }
+
+#winText{
+    font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 20px;
+    display: none;
+    color: white;
+    font-size: calc(16px + 7vw);
+    transform: translateX(-50%) translateY(-50%);
+}
+
 #screenSize{
     position: absolute;
     top: 0;
@@ -27,6 +40,10 @@
 
 #topBar{
     height: var(--topBarHeight);
+}
+
+#topBar img{
+    height: 100%;
 }
 
 #pieChart{

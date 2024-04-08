@@ -8,12 +8,28 @@ const Colors = {
   highlight: "#1ff0a7"
 }
 
+const Verdicts = {
+  WIN: 1,
+  LOSE: 0
+}
+
 function getColor(value) {
   switch (value) {
     case null: return Colors.black; break;
     case "R": return Colors.red; break;
     case "B": return Colors.blue; break;
   }
+}
+
+function gameEnd(verdict){
+  if(verdict == Verdicts.WIN){
+    document.getElementById("winText").innerHTML = "You Win!";
+    document.getElementById("winText").style.backgroundColor = Colors.blue;
+  } else if (verdict == Verdicts.LOSE){
+    document.getElementById("winText").innerHTML = "Game Over";
+    document.getElementById("winText").style.backgroundColor = Colors.red;
+  }
+  document.getElementById("winText").style.display = "block"; // make the verdict visible
 }
 
 function getPaddingSize() {
@@ -123,9 +139,26 @@ function advance(moves) {
       // update the board
       board = nextGeneration(board, nowrapNeighborIndices);
       drawGame(board, 0.5);
-      playersTurn = true; // animation is over, player can play next turn
+      if (!checkForWin(board)){
+        // the game is not over yet
+        playersTurn = true; // animation is over, player can play next turn
+      }
     }
   }, 50);
+}
+
+// return true if the game was won
+function checkForWin(board){
+  let bluePercent = calculateBluePercentage(board);
+  console.log("bluePercent:",bluePercent);
+  if (bluePercent >= 0.8){
+    gameEnd(Verdicts.WIN);
+    return true;
+  } else if (bluePercent <= 0.2) {
+    gameEnd(Verdicts.LOSE);
+    return true;
+  }
+  return false;
 }
 
 // register player move
