@@ -105,12 +105,6 @@ function initializeBoard() {
   }
 }
 
-let board = initializeBoard();
-let playersTurn = true;
-resizeCanvas(board);
-
-window.addEventListener("resize", () => { resizeCanvas(board) });
-
 function resizeCanvas(game) {
   let screenElem = document.getElementById("screenSize");
   let topBarElem = document.getElementById("topBar");
@@ -170,7 +164,7 @@ canvas.addEventListener("click", (evt) => {
     playersTurn = false; // temporarily disable player from making another turn
     board[y][x] = 'B'; // player move
     
-    let comMove = computerMove(board, nowrapNeighborIndices, Strategies.RANDOM, "R");
+    let comMove = computerMove(board, nowrapNeighborIndices, comStrategy, "R");
     board[comMove[0]][comMove[1]] = 'R'; // computer move
     
     drawGame(board); // draw & update game
@@ -198,3 +192,22 @@ function drawChart(bluePercent) {
   ctx2.moveTo(chartCanvas.width / 2, chartCanvas.height / 2); // return to center
   ctx2.fill();
 }
+
+let comStrategy = Strategies.RANDOM;
+
+function hideWelcomeScreen(strategy){
+  document.getElementById("welcome").style.display = "none";
+  if(strategy == "SINGLE_MAX_FLIPPED"){
+    comStrategy = Strategies.SINGLE_MAX_FLIPPED;
+    console.log("Single Max Flipped");
+  } else {
+    comStrategy = Strategies.RANDOM;
+    console.log("Random");
+  }
+}
+
+let board = initializeBoard();
+let playersTurn = true;
+resizeCanvas(board);
+
+window.addEventListener("resize", () => { resizeCanvas(board) });

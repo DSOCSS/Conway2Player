@@ -8,6 +8,55 @@
 </head>
 
 <body>
+  <!-- Welcome Screen -->
+  <div id="welcome">
+    <img class="centerImg" src="./Conway2PlayerLogo.png">
+    <div style="padding-left: 5%; padding-right: 5%;">
+      <h3>Welcome to Conway 2 Player, a strategic game based off of <a
+          href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">John Conway's Game of Life</a>.</h3>
+
+      <p>
+        The game is played on a rectangular board of arbitrary dimensions. Each square on a board can be one of three
+        things: an alive <span style="color: #3266a8">blue</span> cell, an alive <span style="color: #d13e36">red</span>
+        cell, or a dead cell. You are playing as <span style="color: #3266a8">Team Blue</span> and your goal is to
+        reach
+        a state where
+        <span style="color: #3266a8">80%</span> of the alive cells are team blue. If <span
+          style="color: #d13e36">80%</span> of the alive cells become team red, the game
+        is lost.
+      </p>
+      <details>
+        <summary>[Click to see all rules]</summary>
+        <p> Each board iteration, you (<span style="color: #3266a8">team blue</span>) get to choose one dead cell (by
+          clicking/tapping on it) to become an alive cell on team blue. Afterwards, your opponent (<span
+            style="color: #d13e36">team red</span>) will become an alive cell on team red. Then, the next generation
+          will
+          be computed.
+          We use the following rules to determine if each cell lives on or dies in the next generation:
+        <ol style="text-align: left; padding-right: 5%;">
+          <li>Any alive cell that has 1 or 0 live neighbors will be dead in the next round due to overpopulation</li>
+          <li>Any alive cell that has 2 or 3 live neighbors will continue to live into the next round.</li>
+          <li>Any dead cell with exactly 3 live neighbors will become alive in the next round. The new alive cell will
+            be
+            on the same team as the majority of its parents; so if it has 2 or 3 blue parents it will be on <span
+              style="color: #3266a8">team blue</span>, and
+            if it has 2 or 3 red parents it will be on <span style="color: #d13e36">team red</span>.</li>
+        </ol>
+        </p>
+      </details>
+
+      <p><strong>Ready to start the game?</strong></p>
+
+      <button onclick="hideWelcomeScreen('RANDOM');">Let's Play!</button>
+
+      <p>This game was programmed by Arthur Zarins and Ribhu Hooja.</p>
+      <p>This is a <a href="https://dsocss.github.io/website" target="_blank" rel="noopener noreferrer">Dartmouth
+          Society of CS Students</a> coding project. Visit our website to learn more about us!</p>
+      <!-- <button onclick="hideWelcomeScreen('SINGLE_MAX_FLIPPED');">Medium</button> -->
+    </div>
+
+  </div>
+
   <div id="screenSize"></div>
   <div id="topBar">
     <img src="./Conway2PlayerLogo.png">

@@ -1,11 +1,13 @@
 :root{
     --topBarHeight: 100px;
+    --backgroundColor: rgb(53, 53, 53);
 }
 :root, body, html{
     padding: 0;
     margin: 0;
-    background-color: rgb(53, 53, 53);
+    background-color: var(--backgroundColor);
 }
+
 #game-of-life{
     padding: 0;
     margin: 0;
@@ -53,4 +55,36 @@
     z-index: 5;
     height: calc(var(--topBarHeight) - 10px);
     width: calc(var(--topBarHeight) - 10px);
+}
+
+.centerImg{
+    margin-top: 30px;
+    max-width: 50%;
+    position: relative;
+}
+
+
+#welcome{
+    z-index: 100;
+    background-color: var(--backgroundColor);
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    text-align: center;
+    color: white;
+    font-family: Consolas, 'Courier New', Courier, monospace;
+}
+
+a{
+    color: white;
+    text-decoration: underline;
+}
+
+button{
+    background-color: white;
+    color: black;
+    border-radius: 15px;
+    font-size: 20px;
+    border: none;
+    margin-bottom: 40px;
 }

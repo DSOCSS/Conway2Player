@@ -250,7 +250,7 @@ function randomMove(validIndices) {
 // number of cells flipped to the computer's side in the next move
 function singleMaxFlippedMove(board, neighborIndexFn, validIndices, computerColor) {
   let bestMovesArray = new Array();
-  let maxFlipped = 0;
+  let maxFlipped = Number.MIN_VALUE;
   for (index of validIndices) {
     let x = index[0];
     let y = index[1];
